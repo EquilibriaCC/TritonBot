@@ -1,0 +1,27 @@
+{
+  "name": "tritonbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "start.js",
+  "scripts": {
+    "start": "cd src && node start.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaJuukes/DisCrypto.git"
+  },
+  "author": "DaJuukes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Triton-io/TritonBot"
+  },
+  "homepage": "https://github.com/Triton-io/TritonBot",
+  "dependencies": {
+    "discord.js": "^11.3.0",
+    "moment": "^2.21.0",
+    "moment-duration-format": "^2.2.2",
+    "node-os-utils": "^1.0.7",
+    "os-utils": "0.0.14",
+    "snekfetch": "^4.0.0"
+  }
+}
