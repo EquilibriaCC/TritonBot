@@ -4,11 +4,11 @@ module.exports = {
     usage: 'eval <code>',
     permission: 6,
     help: 'Allows bot administrators to evaluate code to test the bot.',
-    main: function(bot, msg) {
+    main: async function(bot, msg) {
         const Discord = require('discord.js'),
             util = require('util');
 
-        if (msg.author.id === require('../config.json').owner) {
+        if (msg.author.id === require('../data/config.json').owner) {
             var code = msg.content;
             var embed = new Discord.RichEmbed()
                 .setFooter(`${msg.author.username}`, `${msg.author.avatarURL}`)
@@ -30,15 +30,15 @@ module.exports = {
                 } else {
                     embed.addField('Type', '```js\n' + type + '```');
                 }
-                msg.channel.send({ embed: embed });
+                await msg.channel.send({ embed: embed });
             } catch (err) {
                 embed.setTitle('Error Thrown in Javascript Evaluation')
                     .setColor(0xFF0000)
                     .addField('Error', '```LDIF\n' + clean(err.message) + '```');
-                msg.channel.send({ embed: embed });
+                await msg.channel.send({ embed: embed });
             }
         } else {
-            msg.reply('you do not have permission to use eval!');
+            await msg.reply('you do not have permission to use eval!');
         }
 
         function clean(text) {

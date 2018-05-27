@@ -1,5 +1,4 @@
 const fs = require('fs');
-const unirest = require('unirest');
 const snekfetch = require('snekfetch');
 const Discord = require('discord.js');
 if (process.argv[2] && process.argv[2] === '--travis') var config = require('./config-example.json');
@@ -24,8 +23,7 @@ module.exports = bot => {
         );
     };
 
-
-	 * Core message processing functions
+    /* Core message processing functions
 	 */
 
     // Implement categories of commands and check this based on those
@@ -55,39 +53,37 @@ module.exports = bot => {
         }
     };
 
-    bot.processMessage = function(msg) {
-        if (channel && msg.channel.id === channel) bot.log(msg.guild.name + ' | ' + msg.channel.name + ' | ' + msg.member.displayName + ' | ' + msg.cleanContent);
+    bot.processMessage = async function(msg) {
 
         if (msg.author.bot) return;
 
         if (msg.content.startsWith(config.prefix))
-                try {
-                    msg.args = msg.content.split(/\s+/g);
-                    msg.content = msg.content.substring(msg.content.indexOf(' ') + 1, msg.content.length) || null;
-                    var command = msg.args.shift().slice(prefix.length).toLowerCase();
-                    var cmd = bot.commands.get(command);
+            try {
+                msg.args = msg.content.split(/\s+/g);
+                msg.content = msg.content.substring(msg.content.indexOf(' ') + 1, msg.content.length) || null;
+                var command = msg.args.shift().slice(config.prefix.length).toLowerCase();
+                var cmd = bot.commands.get(command);
 
-                    var perms = bot.permLevel(msg);
+                var perms = bot.permLevel(msg);
 
-                    if (!cmd) {
-                        return;
-                    } else if (perms === 0) {
-                        msg.reply('you are blacklisted from using the bot!');
-                    } else if (perms < cmd.permission) {
-                        msg.reply('you do not have permission to do this!');
-                    } else if (bot.enabled(cmd)) {
-                        bot.logCommand(command, msg.content, msg.author.username, msg.channel.name, msg.guild.name);
-                        try {
-                            cmd.main(bot, msg);
-                        } catch (err) {
-                            msg.channel.send('Oh no! We encountered an error:\n```' + err.stack + '```');
-                        }
+                if (!cmd) {
+                    return;
+                } else if (perms === 0) {
+                    msg.reply('you are blacklisted from using the bot!');
+                } else if (perms < cmd.permission) {
+                    msg.reply('you do not have permission to do this!');
+                } else if (bot.enabled(cmd)) {
+                    bot.logCommand(command, msg.content, msg.author.username, msg.channel.name, msg.guild.name);
+                    try {
+                        cmd.main(bot, msg);
+                    } catch (err) {
+                        msg.channel.send('Oh no! We encountered an error:\n```' + err.stack + '```');
                     }
-                } catch (err) {
-                    msg.channel.send('Oh no! We encountered an error:\n```' + err.stack + '```');
-                    bot.error(err.stack);
                 }
-        });
+            } catch (err) {
+                msg.channel.send('Oh no! We encountered an error:\n```' + err.stack + '```');
+                bot.error(err.stack);
+            }
     };
 
     /**
@@ -121,17 +117,17 @@ module.exports = bot => {
 	 * Logging functions
 	 */
 
-    bot.logCommand = function(command, arguments, user, channel2, server) {
-        bot.webhook('Command Executed', `**Command:** ${command}\n**User:** ${user}\n**Arguments:** ${arguments}\n**Server:** ${server}\n**Channel:** #${channel2}`, '#0000FF');
+    bot.logCommand = function(command, args, user, channel2, server) {
+        //bot.webhook('Command Executed', `**Command:** ${command}\n**User:** ${user}\n**Arguments:** ${args}\n**Server:** ${server}\n**Channel:** #${channel2}`, '#0000FF');
     };
 
     bot.error = function(err) {
         if (bot.shard) {
             console.log(this.timestamp() + ' [SHARD ' + bot.shard.id + '] [ERROR] | ' + err.stack);
-            bot.webhook('ERROR', '[SHARD ' + bot.shard.id + '] [ERROR] | ' + err.stack, '#FF0000');
+
         } else {
             console.log(this.timestamp() + ' [ERROR] | ' + err.stack);
-            bot.webhook('ERROR', '[ERROR] | ' + err.stack, '#FF0000');
+
         }
     };
 
@@ -146,20 +142,20 @@ module.exports = bot => {
     bot.warn = function(txt) {
         if (bot.shard) {
             console.log(this.timestamp() + ' [SHARD ' + bot.shard.id + '] [WARN]  | ' + txt);
-            bot.webhook('Warning', ' [SHARD ' + bot.shard.id + '] [WARN]  | ' + txt, '#FFFF00');
+
         } else {
             console.log(this.timestamp() + ' [WARN]  | ' + txt);
-            bot.webhook('Warning', '[WARN]  | ' + txt, '#FFFF00');
+
         }
     };
 
     bot.log = function(txt) {
         if (bot.shard) {
             console.log(this.timestamp() + ' [SHARD ' + bot.shard.id + ']  [LOG]  | ' + txt);
-            bot.webhook('Log', '[SHARD ' + bot.shard.id + '] ' + txt, '#000000');
+
         } else {
             console.log(this.timestamp() + '  [LOG]  | ' + txt);
-            bot.webhook('Log', txt, '#000000');
+
         }
     };
 
