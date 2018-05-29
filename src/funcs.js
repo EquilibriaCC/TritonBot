@@ -46,10 +46,8 @@ module.exports = bot => {
             return 3;
         } else if (msg.member.hasPermission('MANAGE_MESSAGES')) {
             return 2;
-        } else if (!bot.blacklist(msg.author.id)) {
+        }  else {
             return 1;
-        } else {
-            return 0;
         }
     };
 
