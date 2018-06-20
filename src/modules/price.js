@@ -45,7 +45,7 @@ module.exports = {
             .addField('USD Price', "$"+ (parseFloat(trade_ogre.price) * rate), true)
             .addField('BTC Price', trade_ogre.price + " BTC", true)
             .addField('24hr Volume (BTC only)', "$" + togre_vol.toFixed(2), true)
-            .addField('Movement', (parseFloat(trade_ogre.initialprice) / parseFloat(trade_ogre.price)).toFixed(1) + "%", true);
+            .addField('Movement', (((parseFloat(trade_ogre.price) / parseFloat(trade_ogre.initialprice)) * 100) - 100).toFixed(2) + "%", true);
 
         msg.channel.send(emb);
 
