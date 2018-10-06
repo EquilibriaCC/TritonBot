@@ -9,8 +9,7 @@ module.exports = {
     help: 'Fetches price.',
     main: async function(bot, msg) {
 
-        const altexd = await fetch('https://api.altex.exchange/v1/ticker');
-        const altex = await altexd.json();
+       
 
         const btc_usdd =  await fetch('https://blockchain.info/ticker');
         const btc_usd = await btc_usdd.json();
@@ -25,17 +24,8 @@ module.exports = {
             .setFooter('Triton Team')
             .setTimestamp();
 
-        let altex_vol = 0;
+        
 
-        altex_vol += parseFloat(altex.data.BTC_TRIT.volume) * rate;
-
-        emb.addField('\u200b', '**Altex**')
-            .addField('USD Price', "$"+ (parseFloat(altex.data.BTC_TRIT.last) * rate), true)
-            .addField('BTC Price', altex.data.BTC_TRIT.last + " BTC", true)
-            .addField('XMR Price', altex.data.XMR_TRIT.last + " XMR", true)
-            .addField('LTC Price', altex.data.LTC_TRIT.last + " LTC", true)
-            .addField('24hr Volume (BTC only)', "$" + altex_vol.toFixed(2), true)
-            .addField('Movement', altex.data.BTC_TRIT.change + "%", true);
 
         let togre_vol = 0;
 
