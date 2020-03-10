@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/Triton-io/TritonBot",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "discord.js": "^11.3.0",
     "moment": "^2.21.0",
     "moment-duration-format": "^2.2.2",
